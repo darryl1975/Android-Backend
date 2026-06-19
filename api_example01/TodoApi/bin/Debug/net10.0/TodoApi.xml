@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TodoApi</name>
+    </assembly>
+    <members>
+        <member name="M:TodoApi.Controllers.TodoController.GetAll(System.Boolean)">
+            <summary>Get all to-do items.</summary>
+            <param name="includeDeleted">When true, includes soft-deleted items.</param>
+        </member>
+        <member name="M:TodoApi.Controllers.TodoController.GetById(System.Int32)">
+            <summary>Get a single to-do item by ID.</summary>
+        </member>
+        <member name="M:TodoApi.Controllers.TodoController.Create(TodoApi.DTOs.CreateTodoItemDto)">
+            <summary>Create a new to-do item.</summary>
+        </member>
+        <member name="M:TodoApi.Controllers.TodoController.Update(System.Int32,TodoApi.DTOs.UpdateTodoItemDto)">
+            <summary>Update an existing to-do item.</summary>
+        </member>
+        <member name="M:TodoApi.Controllers.TodoController.Delete(System.Int32)">
+            <summary>Soft-delete a to-do item (sets deleted = true).</summary>
+        </member>
+        <member name="T:Program">
+            <summary>
+            Auto-generated public partial Program class for top-level statement apps.
+            </summary>
+        </member>
+    </members>
+</doc>

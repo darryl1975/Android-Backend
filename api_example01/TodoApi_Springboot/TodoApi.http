@@ -1,0 +1,48 @@
+### Base URL
+@baseUrl = http://localhost:8080
+
+### Get all todos (non-deleted only)
+GET {{baseUrl}}/api/todo
+Accept: application/json
+
+###
+
+### Get all todos including deleted
+GET {{baseUrl}}/api/todo?includeDeleted=true
+Accept: application/json
+
+###
+
+### Get todo by ID
+GET {{baseUrl}}/api/todo/1
+Accept: application/json
+
+###
+
+### Create a new todo
+POST {{baseUrl}}/api/todo
+Content-Type: application/json
+
+{
+  "task": "Buy groceries",
+  "description": "Milk, eggs, bread"
+}
+
+###
+
+### Update a todo
+PUT {{baseUrl}}/api/todo/1
+Content-Type: application/json
+
+{
+  "task": "Buy groceries",
+  "description": "Milk, eggs, bread, butter",
+  "deleted": false
+}
+
+###
+
+### Soft-delete a todo
+DELETE {{baseUrl}}/api/todo/1
+
+###

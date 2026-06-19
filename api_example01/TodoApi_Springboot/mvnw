@@ -1,0 +1,55 @@
+#!/bin/sh
+# Maven Wrapper Script for Unix/macOS
+# Downloads Apache Maven on first run and caches it in ~/.m2/wrapper/dists/
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+WRAPPER_PROPERTIES="$SCRIPT_DIR/.mvn/wrapper/maven-wrapper.properties"
+
+if [ ! -f "$WRAPPER_PROPERTIES" ]; then
+  echo "ERROR: $WRAPPER_PROPERTIES not found." >&2
+  exit 1
+fi
+
+# Read distributionUrl from properties (strip Windows-style \r)
+DISTRIBUTION_URL=$(grep "^distributionUrl=" "$WRAPPER_PROPERTIES" | cut -d= -f2- | tr -d '\r')
+
+if [ -z "$DISTRIBUTION_URL" ]; then
+  echo "ERROR: distributionUrl not set in $WRAPPER_PROPERTIES" >&2
+  exit 1
+fi
+
+# Derive a stable cache directory name from the zip filename
+DIST_FILENAME=$(basename "$DISTRIBUTION_URL")
+MAVEN_VERSION=$(echo "$DIST_FILENAME" | sed 's/-bin\.zip//')
+DIST_CACHE_DIR="$HOME/.m2/wrapper/dists/$MAVEN_VERSION"
+MAVEN_HOME="$DIST_CACHE_DIR/$MAVEN_VERSION"
+
+if [ ! -d "$MAVEN_HOME" ]; then
+  echo "Downloading $DIST_FILENAME ..."
+  mkdir -p "$DIST_CACHE_DIR"
+  TMP_FILE="$DIST_CACHE_DIR/$DIST_FILENAME.tmp"
+
+  if command -v curl >/dev/null 2>&1; then
+    curl -fL --progress-bar "$DISTRIBUTION_URL" -o "$TMP_FILE"
+  elif command -v wget >/dev/null 2>&1; then
+    wget -q --show-progress "$DISTRIBUTION_URL" -O "$TMP_FILE"
+  else
+    echo "ERROR: curl or wget required to download Maven." >&2
+    exit 1
+  fi
+
+  echo "Extracting $DIST_FILENAME ..."
+  unzip -q "$TMP_FILE" -d "$DIST_CACHE_DIR"
+  rm -f "$TMP_FILE"
+fi
+
+MVN_CMD="$MAVEN_HOME/bin/mvn"
+
+if [ ! -f "$MVN_CMD" ]; then
+  echo "ERROR: mvn not found at $MVN_CMD" >&2
+  exit 1
+fi
+
+exec "$MVN_CMD" "$@"
